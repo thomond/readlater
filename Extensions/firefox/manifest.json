@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "URL Sender",
+  "version": "1.0",
+  "description": "Send URLs to an external address using a JSON query",
+  "permissions": [
+    "contextMenus"
+  ],
+  "browser_action": {
+    "default_popup": "popup.htm",
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  },
+  "background": {
+    "scripts": ["background.js"]
+  }
+}

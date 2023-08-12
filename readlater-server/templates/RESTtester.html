@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test REST Endpoints</title>
+</head>
+<body>
+    <h1>Test REST Endpoints</h1>
+    <h2>Last Updated<div id="last-modified"></div></h2>
+
+    <h2>Add URL</h2>
+    <input type="text" id="add-url-input" placeholder="Enter URL">
+    <button id="add-btn">Add URL</button>
+    <div id="add-results"></div>
+
+    <h2>Get All URLs</h2>
+    <button id="get-all-btn">Get All URLs</button>
+    <div id="get-all-results"></div>
+
+    <h2>Get URL By ID</h2>
+    <input type="text" id="get-by-id-input" placeholder="Enter URL ID">
+    <button id="get-by-id-btn">Get URL By ID</button>
+    <div id="get-by-id-results"></div>
+
+    <h2>Delete URL By ID</h2>
+    <input type="text" id="delete-input" placeholder="Enter URL ID">
+    <button id="delete-btn">Delete URL By ID</button>
+    <div id="delete-results"></div>
+
+    <h2>Mark URL As Read</h2>
+    <input type="text" id="mark-input" placeholder="Enter URL ID">
+    <label><input type="checkbox" id="mark-read-checkbox">Read</label>
+    <button id="mark-btn">Mark URL As Read</button>
+    <div id="mark-results"></div>
+
+    <h2>Truncate URL table</h2>
+    <button id="truncate-btn">Truncate URL table</button>
+    <div id="truncate-results"></div>
+
+    <script>
+        const addBtn = document.getElementById('add-btn');
+        const addUrlInput = document.getElementById('add-url-input');
+        const addResults = document.getElementById('add-results');
+        const lastModified = document.getElementById('last-modified');
+       
+        fetch('/last_modified')
+        .then(response => response.json())
+        .then(data => {
+            lastModified.innerHTML = JSON.stringify(data);
+        });
+
+        addBtn.addEventListener('click', () => {
+            const url = addUrlInput.value;
+            fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    addResults.innerHTML = JSON.stringify(data);
+                });
+        });
+
+        const getAllBtn = document.getElementById('get-all-btn');
+        const getAllResults = document.getElementById('get-all-results');
+        getAllBtn.addEventListener('click', () => {
+            fetch('/urls')
+                .then(response => response.json())
+                .then(data => {
+                    getAllResults.innerHTML = JSON.stringify(data);
+                });
+        });
+
+        const getByIdBtn = document.getElementById('get-by-id-btn');
+        const getByIdInput = document.getElementById('get-by-id-input');
+        const getByIdResults = document.getElementById('get-by-id-results');
+        getByIdBtn.addEventListener('click', () => {
+            const id = getByIdInput.value;
+            fetch(`/urls/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    getByIdResults.innerHTML = JSON.stringify(data);
+                });
+        });
+
+        const deleteBtn = document.getElementById('delete-btn');
+        const deleteInput = document.getElementById('delete-input');
+        const deleteResults = document.getElementById('delete-results');
+        deleteBtn.addEventListener('click', () => {
+            const id = deleteInput.value;
+            fetch(`/urls/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    deleteResults.innerHTML = JSON.stringify(data);
+                });
+        });
+
+        const markBtn = document.getElementById('mark-btn');
+        const markInput = document.getElementById('mark-input');
+        const markResults = document.getElementById('mark-results');
+        markBtn.addEventListener('click', () => {
+            const id = markInput.value;
+            fetch(`/mark/${id}`, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    markResults.innerHTML = JSON.stringify(data);
+                });
+        });
+
+        const truncateBtn = document.getElementById('truncate-btn');
+        const getTrunResults = document.getElementById('truncate-results');
+        truncateBtn.addEventListener('click', () => {
+            fetch('/truncate', {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    getTrunResults.innerHTML = JSON.stringify(data);
+                });
+        });
+    </script>
+</body>
+</html>
